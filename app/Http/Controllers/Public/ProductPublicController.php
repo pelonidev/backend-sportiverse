@@ -12,9 +12,12 @@ class ProductPublicController extends Controller
     {
         try {
             $products = Product::where('status', 1)->get(['id', 'name', 'description', 'category_id', 'price', 'stock', 'image']);
+            $products->each(function ($product) {
+                $product->image_url = asset('http://localhost:8000/storage/products/' . $product->image);
+            });
             return response()->json([
                 'status' => 'OK',
-                'ProductsList' =>  $products->isEmpty() ? [] : $products
+                'ProductsList' =>  $products
             ], 200);
         } catch (\Exception $e) {
             dd($e->getMessage());

@@ -51,7 +51,8 @@ Route::prefix('v1')->group(function () {
         Route::patch('/customer/{username}', [AccountCustomerController::class, 'update']);
 
         // role seller
-        Route::apiResource('/seller/products', ProductSellerController::class);
+        Route::apiResource('/seller/products', ProductSellerController::class)->except(['update']);
+        Route::post('/seller/products/{product}', [ProductSellerController::class, 'update']);
         Route::apiResource('/seller/users', UserSellerController::class);
         Route::apiResource('/seller/orders', OrderSellerController::class);
         Route::get('/seller/{username}', [AccountSellerController::class, 'show']);

@@ -128,7 +128,7 @@ class CategoryAdminController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:20',
                 'description' => 'nullable|string',
-                'slug' => 'required|string|unique:categories,slug,' . $id,
+                'slug' => 'nullable|string|unique:categories,slug,' . $id,
                 'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
             ]);
 
@@ -155,17 +155,24 @@ class CategoryAdminController extends Controller
                 }
             }
 
-            $category->update([
-                'name' => $request->name,
-                'slug' => $request->slug,
-                'description' => $request->description,
-                'image' => $imageName,
-            ]);
+            try {
+                $category->update([
+                    'name' => $request->name,
+                    'slug' => $request->slug,
+                    'description' => $request->description,
+                    'image' => $imageName,
+                ]);
 
-            return response()->json([
-                'status' => 'OK',
-                'message' => 'Category successfully updated'
-            ], 200);
+                return response()->json([
+                    'status' => 'OK',
+                    'message' => 'Category successfully updated'
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 'KO',
+                    'message' =>  $e
+                ], 500);
+            }
         }
 
         return response()->json([

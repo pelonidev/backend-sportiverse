@@ -10,6 +10,19 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductAdminController extends Controller
 {
+    public function index()
+    {
+        try {
+            $products = Product::all();
+            return response()->json([
+                'status' => 'OK',
+                'ProductsList' =>  $products
+            ], 200);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+
     public function update(Request $request, Product $product)
     {
         // Verificar si el usuario tiene el rol requerido
